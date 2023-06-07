@@ -5,10 +5,8 @@ import matplotlib.image as mpimg
 from scipy import ndimage
 
 def rgb2gray(rgb):
-
     r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
-
     return gray
 
 def gaussian_kernel(size, sigma):
@@ -39,7 +37,6 @@ def non_max_suppression(img, D):
     angle = D * 180. / np.pi        #radianes
     angle[angle < 0] += 180
 
-    
     for i in range(1,M-1):
         for j in range(1,N-1):
             try:
@@ -109,7 +106,7 @@ def hysteresis(img, weak, strong=255):
                     pass
     return img
 
-img = mpimg.imread("goat.jpg")
+img = mpimg.imread("../static/goat.jpg")
 img = rgb2gray(img)
 
 kernel = ndimage.convolve(img, gaussian_kernel(5, 2))   #Convolucion Discreta?  Hacer funcion
