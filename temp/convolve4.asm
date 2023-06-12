@@ -1,6 +1,6 @@
 section .data
-    input_file db 'static/input.txt', 0
-    output_file db 'static/result.txt', 0
+    input_file db '../static/input.txt', 0
+    output_file db '../static/result.txt', 0
     image_size equ 300
     kernel_size equ 3
     kernel db -1, 0, 1, -2, 0, 2, -1, 0, 1

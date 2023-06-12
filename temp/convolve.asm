@@ -2,8 +2,8 @@ section .data
     imagen times 300*300 db 0 
 
     kernel db -1, 0, 1, -2, 0, 2, -1, 0, 1
-    nombre_archivo db 'static/input.txt', 0 
-    nombre_archivo_salida db 'static/result.txt', 0 
+    nombre_archivo db '../static/input.txt', 0 
+    nombre_archivo_salida db '../static/result.txt', 0 
 
 section .text
 global _start
