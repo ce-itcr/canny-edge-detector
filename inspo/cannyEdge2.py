@@ -1,25 +1,18 @@
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from scipy import ndimage
+from PIL import Image, ImageFilter
 
 def rgb2gray(rgb):
     r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+    print(gray)
     return gray
 
-def gaussian_kernel(size, sigma):
-    size = int(size) // 2
-    x, y = np.mgrid[-size:size+1, -size:size+1]
-    normal = 1 / (2.0 * np.pi * sigma**2)
-    g =  np.exp(-((x**2 + y**2) / (2.0*sigma**2))) * normal
-    return g
-
-
 def sobel_filters(img):
-    Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.float32)
-    Ky = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.float32)
+    Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.int32)
+    Ky = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.int32)
     
     Ix = ndimage.convolve(img, Kx)  #Convolucion Discreta? Hacer funcion
     Iy = ndimage.convolve(img, Ky)
@@ -44,19 +37,19 @@ def non_max_suppression(img, D):
                 r = 255
                 
                #angle 0
-                if (0 <= angle[i,j] < 22.5) or (157.5 <= angle[i,j] <= 180):
+                if (0 <= angle[i,j] < 22) or (157 <= angle[i,j] <= 180):
                     q = img[i, j+1]
                     r = img[i, j-1]
                 #angle 45
-                elif (22.5 <= angle[i,j] < 67.5):
+                elif (22 <= angle[i,j] < 67):
                     q = img[i+1, j-1]
                     r = img[i-1, j+1]
                 #angle 90
-                elif (67.5 <= angle[i,j] < 112.5):
+                elif (67 <= angle[i,j] < 112):
                     q = img[i+1, j]
                     r = img[i-1, j]
                 #angle 135
-                elif (112.5 <= angle[i,j] < 157.5):
+                elif (112 <= angle[i,j] < 157):
                     q = img[i-1, j-1]
                     r = img[i+1, j+1]
 
@@ -106,15 +99,14 @@ def hysteresis(img, weak, strong=255):
                     pass
     return img
 
+
 img = mpimg.imread("../static/goat.jpg")
 img = rgb2gray(img)
 
-kernel = ndimage.convolve(img, gaussian_kernel(5, 2))   #Convolucion Discreta?  Hacer funcion
-A = sobel_filters(kernel)
+A = sobel_filters(img)
 B = non_max_suppression(A[0], A[1])
 C = threshold(B, 0.05, 0.09)
 D = hysteresis(C[0], C[1], C[2])
-
 
 plt.figure(1)
 plt.subplot(121)
@@ -125,3 +117,7 @@ plt.subplot(122)
 plt.imshow(D)
 plt.title("Gaussian Filter Image")
 plt.show()
+
+result = Image.new('RGB', (300, 300))
+result.paste(D)
+result.save("../static/result.png")
