@@ -1,6 +1,7 @@
 section .bss
 	arr1 times 90000 resb 0
 	res times 90000 resb 0
+	res_final times 90000 resb 0
 
 section .text
 global _start
@@ -14,7 +15,7 @@ mov r12, 0		; img_max
 loop_i:
 inc r8
 cmp r8, 299
-jg done
+jg threshold
 
 mov r10, -1	;j
 
@@ -39,8 +40,8 @@ je res_zero
 
 mov rax, 300
 mul r10
+add rax, r8
 
-inc r8
 mov rdx, rax
 mov rax, 0
 
@@ -146,6 +147,98 @@ strong:
 mov al, 255 
 mov byte [res + rdx], al
 jmp threshold_loop
+
+hysteresis:
+mov r8, -1
+mov r11, 300
+
+loop_i:
+inc r8
+cmp r8, 299
+jg done
+
+mov r10, -1
+
+loop_j:
+inc r10
+
+cmp r10, 299
+jg loop_i
+
+mov rax, 300
+mul r10
+add rax, r8
+
+mov rdx, rax
+mov rax, 0
+
+mov al, byte [res + rdx]
+
+cmp al, 25
+jne loop_j
+
+
+is_in_border:
+
+cmp r8, 0
+je val_zero
+
+cmp r8, 299
+je val_zero
+
+cmp r10, 0
+je val_zero
+
+cmp r10, 299
+je val_zero
+
+is_strong:
+
+mov bl, byte [res + rdx - 299]
+mov bh, byte [res + rdx + 1]
+mov cl, byte [res + rdx + 301]
+mov ch, byte [res + rdx - 300]
+
+cmp bl, 255
+je val_255
+
+cmp bh, 255
+je val_255
+
+cmp cl, 255
+je val_255
+
+cmp ch, 255
+je val_255
+
+mov bl, byte [res + rdx + 300]
+mov bh, byte [res + rdx - 301]
+mov cl, byte [res + rdx - 1]
+mov ch, byte [res + rdx + 299]
+
+cmp bl, 255
+je val_255
+
+cmp bh, 255
+je val_255
+
+cmp cl, 255
+je val_255
+
+cmp ch, 255
+je val_255
+
+jmp val_zero
+
+val_255:
+mov al, 255
+mov byte [res + rdx], al
+jmp loop_j
+
+val_zero:
+mov al, 0
+mov byte [res + rdx], al
+jmp loop_j
 
 done:
 mov rax, 60
