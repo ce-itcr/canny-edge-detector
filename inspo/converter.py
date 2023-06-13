@@ -29,7 +29,7 @@ def resize_image(input_image_path, output_image_path, size):
     resized_image.save(output_image_path)
 
 
-input_path = "../static/barbara.jpg"
+input_path = "../static/cas.jpg"
 output_path = "../static/resized.jpg"
 new_size = (300, 300)
 
