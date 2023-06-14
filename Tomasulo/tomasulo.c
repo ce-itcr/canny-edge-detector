@@ -254,7 +254,29 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
             }
         }
     }
-    if(strncmp(entry->disassembled_text, "add", 3) == 0) {
+    if(strncmp(entry->disassembled_text, "add", 3) == 0) {//add, inc, dec
+        for(int i = 0; i < conn->total_reservation_stations; ++i){
+            if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
+                conn->stations[i]->curr_inst = entry;
+                conn->stations[i]->in_use = true;
+                conn->stations[i]->current_timeout = SUM_TIMEOUT;
+                available_station_sum = true;
+                conn->skip_instruction = true; //is already in a station, do not execute yet
+            }
+        }
+    }
+    if(strncmp(entry->disassembled_text, "inc", 3) == 0) {//add, inc, dec
+        for(int i = 0; i < conn->total_reservation_stations; ++i){
+            if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
+                conn->stations[i]->curr_inst = entry;
+                conn->stations[i]->in_use = true;
+                conn->stations[i]->current_timeout = SUM_TIMEOUT;
+                available_station_sum = true;
+                conn->skip_instruction = true; //is already in a station, do not execute yet
+            }
+        }
+    }
+    if(strncmp(entry->disassembled_text, "dec", 3) == 0) {//add, inc, dec
         for(int i = 0; i < conn->total_reservation_stations; ++i){
             if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
                 conn->stations[i]->curr_inst = entry;
@@ -289,7 +311,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
     }
     if (strncmp(entry->disassembled_text, "pop", 3) == 0) {
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == STR_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_STR) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = STR_TIMEOUT;
@@ -300,7 +322,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
     }
     if (strncmp(entry->disassembled_text, "xor", 3) == 0) {
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == XOR_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_XOR) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = XOR_TIMEOUT;
@@ -311,7 +333,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
     }
     if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -320,9 +342,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "je", 2) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -331,9 +353,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -342,9 +364,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jg", 2) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -353,9 +375,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jl", 2) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -364,9 +386,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jge", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -375,9 +397,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jne", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -386,9 +408,9 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
-    if (strncmp(entry->disassembled_text, "cmp", 3) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    if (strncmp(entry->disassembled_text, "jz", 2) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
-        	if (!conn->stations[i]->in_use && conn->stations[i]->type == CMP_MULTIPLY) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
             	conn->stations[i]->curr_inst = entry;
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = CMP_TIMEOUT;
@@ -399,7 +421,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
     }
 
     //No station can take this instruction that was issued, we need to stall until they free up
-    if(!available_station_multiply && !available_station_sum && !available_station_load && !conn->finish){
+    if(!available_station_div && !available_station_str && !available_station_cmp && !available_station_xor && !available_station_multiply && !available_station_sum && !available_station_load && !conn->finish){
         SIM_LOG_INFO(1, obj, 0, "I need to stall");
         conn->stall = true;
         conn->stall_address = address; //we'll loop in the current RIP until some engine finished and removes the stall
@@ -425,6 +447,14 @@ void station_timers(conf_object_t * obj){
                 SIM_LOG_INFO(1, obj, 0, "Station SUM decremented timeout to %x\n", conn->stations[i]->current_timeout);
             } else if(conn->stations[i]->type==2){
 		SIM_LOG_INFO(1, obj, 0, "Station MUL decremented timeout to %x\n", conn->stations[i]->current_timeout);
+	    } else if(conn->stations[i]->type==3){
+		SIM_LOG_INFO(1, obj, 0, "Station DIV decremented timeout to %x\n", conn->stations[i]->current_timeout);
+	    } else if(conn->stations[i]->type==4){
+		SIM_LOG_INFO(1, obj, 0, "Station STR decremented timeout to %x\n", conn->stations[i]->current_timeout);
+	    } else if(conn->stations[i]->type==5){
+		SIM_LOG_INFO(1, obj, 0, "Station CMP decremented timeout to %x\n", conn->stations[i]->current_timeout);
+	    } else if(conn->stations[i]->type==6){
+		SIM_LOG_INFO(1, obj, 0, "Station XOR decremented timeout to %x\n", conn->stations[i]->current_timeout);
 	    }   
         }
     }
@@ -612,6 +642,19 @@ void init_all_stations(conf_object_t * obj){
     new_station =  MM_ZALLOC(1, unit_functional_station);
     new_station->type = TYPE_MULTIPLY;
     init_add_station(obj, new_station);
+    new_station =  MM_ZALLOC(1, unit_functional_station);
+    new_station->type = TYPE_DIV;
+    init_add_station(obj, new_station);
+    new_station =  MM_ZALLOC(1, unit_functional_station);
+    new_station->type = TYPE_STR;
+    init_add_station(obj, new_station);
+    new_station =  MM_ZALLOC(1, unit_functional_station);
+    new_station->type = TYPE_CMP;
+    init_add_station(obj, new_station);
+    new_station =  MM_ZALLOC(1, unit_functional_station);
+    new_station->type = TYPE_XOR;
+    init_add_station(obj, new_station);
+
     /*Here you can add stations of different types and ALWAYS call the init_add_station function to record it in the stations array so that 
      * it's decremented every cycle.
      * EXAMPLE:
