@@ -37,7 +37,7 @@ _start:
 
 	mov rax, 0	; count
 	push rax
-	mov rax, 0	; current num
+	mov rax, 0	; current num in file
 	push rax
 
 readfile:
@@ -97,6 +97,7 @@ spacebyte:
 	mov ch, 0
 	mov rdx, rcx		; Inicia dl en el valor donde comienza el numero
 	pop rcx
+	mov r9, 1
 
 str2int:			; Bucle para convertir el ascii del numero obtenido en el numero en si 
 
@@ -111,6 +112,10 @@ str2int:			; Bucle para convertir el ascii del numero obtenido en el numero en s
 	dec ch
 
 	mov al, [buffer + rdx]
+
+	cmp al, 45
+	je num_neg
+
 	sub al, 48		; Para obtener el numero se resta 48 al resultado del ascii (48 es el valor del ascii 0)
 	
 	push rdx
@@ -126,12 +131,36 @@ str2int:			; Bucle para convertir el ascii del numero obtenido en el numero en s
 	pop rdx
 	add r8, rdx		; r8 ahora tiene el nuevo valor para comenzar a leer al final del segundo byte
 	push r8
-	mov r13, r11
+
+	mov rax, r11
+	mul r9
+	mov r13, rax
+	mov r8, r13	; a hypot
+	mov r9, r13	; b hypot
+	jmp abs_x_hypot
+
+num_neg:
+
+	mov r9, -1		; Para obtener el numero se resta 48 al resultado del ascii (48 es el valor del ascii 0)
+	
+	inc rdx
+
+	jmp str2int		; Bucle hasta hacer eso con el numero completo de un byte
+
+
+abs_x_hypot:
+	cmp r8, 0
+	jg prehypot
+
+	mov r10, -1
+	mov rax, r8
+	mul r10
+	mov r8, rax
+	mov r9, rax
+
 
 prehypot:
 
-	mov r8, r13	; a
-	mov r9, r13	; b
 	mov r10, 100
 
 	mov rax, r8
@@ -172,6 +201,7 @@ hypot:
 	mov r10, rax
 
 	jmp hypot
+
 
 
 done_hypot:			; modificar done para loop y G.max()
@@ -263,7 +293,7 @@ abs_x:
 	mov r8, -1
 	mov rax, r9
 	mul r8
-	mov r9, r8
+	mov r9, rax
 
 
 abs_y:
@@ -273,7 +303,7 @@ abs_y:
 	mov r8, -1
 	mov rax, r11
 	mul r8
-	mov r11, r8
+	mov r11, rax
 
 prearctan:
 
@@ -349,6 +379,9 @@ arctanaux:
 	jmp arctan
 
 correct_quadrant:
+	mov rax, r9
+	mul rcx
+	mov r9, rax
 	add r9, r14
 	mov rax, r9
 	mov rdx, 0
@@ -369,6 +402,9 @@ res_neg:
 	mov r9, rax
 
 rad_2_deg:
+	cmp r9, 0
+	jl deg_neg
+
 	xor rdx, rdx
 	mov rbx, 3
 	mov rcx, 180
@@ -377,11 +413,27 @@ rad_2_deg:
 	div rbx
 	mov r9, rax
 	cmp r9, 0
-	jg done_arctan
+	jge done_arctan
 
 deg_neg:
-	mov rax, 180
-	add r9, rax
+	mov rax, r9
+	mov rcx, -1
+	mul rcx
+	mov r9, rax
+
+	xor rdx, rdx
+	mov rbx, 3
+	mov rcx, 180
+	mov rax, r9
+	mul rcx
+	div rbx
+
+	mov rbx, -1
+	mul rbx
+	add rax, rcx
+
+	mov r9, rax
+	cmp r9, 0
 
 done_arctan:		; Modificar done arctan
 	mov rax, r9
