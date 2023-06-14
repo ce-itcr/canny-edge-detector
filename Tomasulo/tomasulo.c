@@ -24,7 +24,7 @@
 #include <simics/device-api.h>
 #include <simics/model-iface/processor-info.h>
 #include <simics/simulator-api.h>
-#define MAX_INST 100
+#define MAX_INST 900
 #define MAX_STATIONS 10
 #define TYPE_LOAD 0 //mov
 #define TYPE_SUM 1 //add, inc, dec
@@ -241,6 +241,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
     bool available_station_str = false;
     bool available_station_cmp = false;
     bool available_station_xor = false;
+    bool available_station_syscall = false;
 
 
     if(strncmp(entry->disassembled_text, "mov", 3) == 0) {
@@ -265,7 +266,7 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
             }
         }
     }
-    if(strncmp(entry->disassembled_text, "inc", 3) == 0) {//add, inc, dec
+    if(strncmp(entry->disassembled_text, "inc", 3) == 0) {//add, inc, dec, sub
         for(int i = 0; i < conn->total_reservation_stations; ++i){
             if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
                 conn->stations[i]->curr_inst = entry;
@@ -276,7 +277,18 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
             }
         }
     }
-    if(strncmp(entry->disassembled_text, "dec", 3) == 0) {//add, inc, dec
+    if(strncmp(entry->disassembled_text, "dec", 3) == 0) {//add, inc, dec, sub
+        for(int i = 0; i < conn->total_reservation_stations; ++i){
+            if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
+                conn->stations[i]->curr_inst = entry;
+                conn->stations[i]->in_use = true;
+                conn->stations[i]->current_timeout = SUM_TIMEOUT;
+                available_station_sum = true;
+                conn->skip_instruction = true; //is already in a station, do not execute yet
+            }
+        }
+    }
+    if(strncmp(entry->disassembled_text, "sub", 3) == 0) {//add, inc, dec, sub
         for(int i = 0; i < conn->total_reservation_stations; ++i){
             if(!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_SUM){
                 conn->stations[i]->curr_inst = entry;
@@ -320,6 +332,17 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
+    if (strncmp(entry->disassembled_text, "push", 4) == 0) {
+    	for (int i = 0; i < conn->total_reservation_stations; ++i) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_STR) {
+            	conn->stations[i]->curr_inst = entry;
+            	conn->stations[i]->in_use = true;
+            	conn->stations[i]->current_timeout = STR_TIMEOUT;
+            	available_station_str = true;
+            	conn->skip_instruction = true;
+        	}
+    	}
+    }
     if (strncmp(entry->disassembled_text, "xor", 3) == 0) {
     	for (int i = 0; i < conn->total_reservation_stations; ++i) {
         	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_XOR) {
@@ -327,6 +350,29 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
             	conn->stations[i]->in_use = true;
             	conn->stations[i]->current_timeout = XOR_TIMEOUT;
             	available_station_xor = true;
+            	conn->skip_instruction = true;
+        	}
+    	}
+    }
+    if (strncmp(entry->disassembled_text, "or", 2) == 0) {
+    	for (int i = 0; i < conn->total_reservation_stations; ++i) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_XOR) {
+            	conn->stations[i]->curr_inst = entry;
+            	conn->stations[i]->in_use = true;
+            	conn->stations[i]->current_timeout = XOR_TIMEOUT;
+            	available_station_xor = true;
+            	conn->skip_instruction = true;
+        	}
+    	}
+    }
+
+    if (strncmp(entry->disassembled_text, "call", 4) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+    	for (int i = 0; i < conn->total_reservation_stations; ++i) {
+        	if (!conn->stations[i]->in_use && conn->stations[i]->type == TYPE_CMP) {
+            	conn->stations[i]->curr_inst = entry;
+            	conn->stations[i]->in_use = true;
+            	conn->stations[i]->current_timeout = CMP_TIMEOUT;
+            	available_station_cmp = true;
             	conn->skip_instruction = true;
         	}
     	}
@@ -419,9 +465,13 @@ void identify_instruction_and_operand(conf_object_t * obj, conf_object_t * cpu, 
         	}
     	}
     }
+    if (strncmp(entry->disassembled_text, "syscall", 7) == 0) { //cmp, je, jmp, jg, jl, jge, jne, jz
+        available_station_syscall = true;
+    	conn->skip_instruction = true;
+    }
 
     //No station can take this instruction that was issued, we need to stall until they free up
-    if(!available_station_div && !available_station_str && !available_station_cmp && !available_station_xor && !available_station_multiply && !available_station_sum && !available_station_load && !conn->finish){
+    if(!available_station_syscall && !available_station_div && !available_station_str && !available_station_cmp && !available_station_xor && !available_station_multiply && !available_station_sum && !available_station_load && !conn->finish){
         SIM_LOG_INFO(1, obj, 0, "I need to stall");
         conn->stall = true;
         conn->stall_address = address; //we'll loop in the current RIP until some engine finished and removes the stall
