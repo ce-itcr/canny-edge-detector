@@ -35,6 +35,16 @@
 	global _start
 	
 _start:
+
+	mov rax, 2		;SYS_OPEN
+	mov rdi, newfilename
+	mov rsi, 64		;create
+	mov rdx, 0666o
+	syscall
+
+	mov rax, 3
+	mov rdi, rbx
+	syscall
 	
 	mov rax, 0                   ; count
 	push rax
