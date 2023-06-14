@@ -1,0 +1,4 @@
+project: /home/kevin/Desktop/canny-edge-detector/simics-project
+simics-root: /home/kevin/Desktop/SIMICS/simics-6.0.166
+simics-model-builder: /home/kevin/Desktop/SIMICS/simics-6.0.166
+mingw: None
