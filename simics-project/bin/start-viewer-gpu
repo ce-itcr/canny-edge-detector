@@ -1,0 +1,5 @@
+#!/bin/bash
+# this file will be overwritten by the project setup script
+SIMICS_BASE_PACKAGE="/home/elias/Documents/arqui/taller_simes/simics-6.0.166"
+export SIMICS_BASE_PACKAGE
+exec "/home/elias/Documents/arqui/taller_simes/simics-6.0.166/../simics-viewer-6.0.15/bin/start-viewer-gpu"  "$@"

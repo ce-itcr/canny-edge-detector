@@ -1,0 +1,166 @@
+<!doctype html>
+<head>
+<meta charset=utf-8>
+<link rel="stylesheet" href="simics.css">
+<title>Undocumented interfaces</title>
+<script>function postUrl() {
+    window.parent.postMessage({ content_url: window.location.href }, "*");
+}
+if (window.parent != null && window.parent != window) {
+    postUrl();
+    window.addEventListener("hashchange", function () {
+        postUrl();
+    });
+} else {
+    // Check if we are part of a Simics doc site and redirect if we are
+    fetch("../simics-doc-site-marker", { method: "HEAD" }).then(response => {
+        if (response.ok) {
+            window.location = "..#" + window.location.href;
+        } else {
+            console.info("Not part of a Simics documentation site");
+        }
+    }).catch(error => {
+        console.warn("Failed to check if this is a Simics documentation site:",
+            error);
+    });
+}</script>
+</head><body>
+<div class=chain>
+<a href="interfaces.html" class="previous">5 Interfaces</a>
+<a href="__rm_interface_serial_interrupt_master.html" class="next">serial_interrupt_master</a>
+</div>
+<div class=path>
+<a href="index.html">Quick-Start Platform x86 Reference Manual</a>&nbsp;/&nbsp;
+<a href="interfaces.html">5 Interfaces</a>&nbsp;/&nbsp;
+</div>
+<h1 class="jdocu"><a class="not-numbered" name="Undocumented-interfaces">Undocumented interfaces</a></h1>
+<p>
+
+</p><p><a name="__rm_interface_bus_master_ide"></a>
+</p><p><a name="__rm_interface_ide_dma"></a>
+</p><p><a name="__rm_interface_ide_dma_v2"></a>
+</p><p><a name="__rm_interface_ioapic"></a>
+The following interfaces are defined by this package, but lack documentation:
+<tt>bus_master_ide</tt>, <tt>ide_dma</tt>, <tt>ide_dma_v2</tt>, <tt>ioapic</tt>
+<br>
+</p><p><a name="__rm_interface_a20"></a>
+</p><p><a name="__rm_interface_bridge"></a>
+</p><p><a name="__rm_interface_callback_info"></a>
+</p><p><a name="__rm_interface_checkpoint"></a>
+</p><p><a name="__rm_interface_class_disassembly"></a>
+</p><p><a name="__rm_interface_component"></a>
+</p><p><a name="__rm_interface_component_connector"></a>
+</p><p><a name="__rm_interface_concurrency_group"></a>
+</p><p><a name="__rm_interface_concurrency_mode"></a>
+</p><p><a name="__rm_interface_conf_object"></a>
+</p><p><a name="__rm_interface_context_handler"></a>
+</p><p><a name="__rm_interface_cpu_cached_instruction"></a>
+</p><p><a name="__rm_interface_cpu_cached_instruction_once"></a>
+</p><p><a name="__rm_interface_cpu_cached_stream"></a>
+</p><p><a name="__rm_interface_cpu_exception_query"></a>
+</p><p><a name="__rm_interface_cpu_instruction_decoder"></a>
+</p><p><a name="__rm_interface_cpu_instruction_query"></a>
+</p><p><a name="__rm_interface_cpu_instrumentation_stream"></a>
+</p><p><a name="__rm_interface_cpu_instrumentation_subscribe"></a>
+</p><p><a name="__rm_interface_cpu_memory_query"></a>
+</p><p><a name="__rm_interface_cycle"></a>
+</p><p><a name="__rm_interface_decoder"></a>
+</p><p><a name="__rm_interface_describe_registers"></a>
+</p><p><a name="__rm_interface_direct_memory_update"></a>
+</p><p><a name="__rm_interface_ethernet_common"></a>
+</p><p><a name="__rm_interface_event_delta"></a>
+</p><p><a name="__rm_interface_exception"></a>
+</p><p><a name="__rm_interface_exec_trace"></a>
+</p><p><a name="__rm_interface_execute"></a>
+</p><p><a name="__rm_interface_execute_control"></a>
+</p><p><a name="__rm_interface_freerun"></a>
+</p><p><a name="__rm_interface_frequency"></a>
+</p><p><a name="__rm_interface_frequency_listener"></a>
+</p><p><a name="__rm_interface_hpet_msi"></a>
+</p><p><a name="__rm_interface_i2c_master"></a>
+</p><p><a name="__rm_interface_i2c_slave"></a>
+</p><p><a name="__rm_interface_i2c_slave_v2"></a>
+</p><p><a name="__rm_interface_icode"></a>
+</p><p><a name="__rm_interface_ieee_802_3_mac"></a>
+</p><p><a name="__rm_interface_ieee_802_3_mac_v3"></a>
+</p><p><a name="__rm_interface_instruction_fetch"></a>
+</p><p><a name="__rm_interface_instrumentation_connection"></a>
+</p><p><a name="__rm_interface_instrumentation_order"></a>
+</p><p><a name="__rm_interface_instrumentation_tool"></a>
+</p><p><a name="__rm_interface_int_register"></a>
+</p><p><a name="__rm_interface_internal_cached_instruction"></a>
+</p><p><a name="__rm_interface_interrupt_ack"></a>
+</p><p><a name="__rm_interface_io_memory"></a>
+</p><p><a name="__rm_interface_jit_control"></a>
+</p><p><a name="__rm_interface_log_object"></a>
+</p><p><a name="__rm_interface_opcode_info"></a>
+</p><p><a name="__rm_interface_packet"></a>
+</p><p><a name="__rm_interface_pci_bridge"></a>
+</p><p><a name="__rm_interface_pci_device"></a>
+</p><p><a name="__rm_interface_pci_express"></a>
+</p><p><a name="__rm_interface_pci_interrupt"></a>
+</p><p><a name="__rm_interface_pci_upstream"></a>
+</p><p><a name="__rm_interface_pcie_device"></a>
+</p><p><a name="__rm_interface_pre_decoder"></a>
+</p><p><a name="__rm_interface_probe"></a>
+</p><p><a name="__rm_interface_processor_cli"></a>
+</p><p><a name="__rm_interface_processor_gui"></a>
+</p><p><a name="__rm_interface_processor_info"></a>
+</p><p><a name="__rm_interface_processor_info_v2"></a>
+</p><p><a name="__rm_interface_processor_internal"></a>
+</p><p><a name="__rm_interface_register_breakpoint"></a>
+</p><p><a name="__rm_interface_save_state"></a>
+</p><p><a name="__rm_interface_sc_gasket_info"></a>
+</p><p><a name="__rm_interface_sc_initiator_gasket"></a>
+</p><p><a name="__rm_interface_sc_memory_profiler_control"></a>
+</p><p><a name="__rm_interface_sc_process_profiler_control"></a>
+</p><p><a name="__rm_interface_sc_simcontext"></a>
+</p><p><a name="__rm_interface_sc_tool_connection"></a>
+</p><p><a name="__rm_interface_sc_version"></a>
+</p><p><a name="__rm_interface_serial_device"></a>
+</p><p><a name="__rm_interface_serial_peripheral_interface_master"></a>
+</p><p><a name="__rm_interface_signal"></a>
+</p><p><a name="__rm_interface_simple_dispatcher"></a>
+</p><p><a name="__rm_interface_simple_interrupt"></a>
+</p><p><a name="__rm_interface_simulator_cache"></a>
+</p><p><a name="__rm_interface_smm_instrumentation_subscribe"></a>
+</p><p><a name="__rm_interface_stall"></a>
+</p><p><a name="__rm_interface_stc"></a>
+</p><p><a name="__rm_interface_step"></a>
+</p><p><a name="__rm_interface_step_cycle_ratio"></a>
+</p><p><a name="__rm_interface_step_event_instrumentation"></a>
+</p><p><a name="__rm_interface_step_info"></a>
+</p><p><a name="__rm_interface_system_panel_layout"></a>
+</p><p><a name="__rm_interface_telemetry"></a>
+</p><p><a name="__rm_interface_temporal_state"></a>
+</p><p><a name="__rm_interface_transaction_translator"></a>
+</p><p><a name="__rm_interface_translate"></a>
+</p><p><a name="__rm_interface_usb"></a>
+</p><p><a name="__rm_interface_virtual_data_breakpoint"></a>
+</p><p><a name="__rm_interface_virtual_instruction_breakpoint"></a>
+</p><p><a name="__rm_interface_vmp"></a>
+</p><p><a name="__rm_interface_vmp_internal"></a>
+</p><p><a name="__rm_interface_vmx_instrumentation_subscribe"></a>
+</p><p><a name="__rm_interface_x86"></a>
+</p><p><a name="__rm_interface_x86_access_type"></a>
+</p><p><a name="__rm_interface_x86_address_query"></a>
+</p><p><a name="__rm_interface_x86_cpuid_query"></a>
+</p><p><a name="__rm_interface_x86_cstate"></a>
+</p><p><a name="__rm_interface_x86_exception"></a>
+</p><p><a name="__rm_interface_x86_exception_query"></a>
+</p><p><a name="__rm_interface_x86_instruction_query"></a>
+</p><p><a name="__rm_interface_x86_instrumentation_subscribe"></a>
+</p><p><a name="__rm_interface_x86_instrumentation_subscribe_v2"></a>
+</p><p><a name="__rm_interface_x86_memory_access"></a>
+</p><p><a name="__rm_interface_x86_memory_operation"></a>
+</p><p><a name="__rm_interface_x86_memory_query"></a>
+</p><p><a name="__rm_interface_x86_msr"></a>
+</p><p><a name="__rm_interface_x86_reg_access"></a>
+</p><p><a name="__rm_interface_x86_smm_state"></a>
+</p><p><a name="__rm_interface_x86_vmp_control"></a>
+The following interfaces are used by this package, but defined by other packages:<br>
+<tt>a20</tt>, <tt>bridge</tt>, <tt>callback_info</tt>, <tt>checkpoint</tt>, <tt>class_disassembly</tt>, <tt>component</tt>, <tt>component_connector</tt>, <tt>concurrency_group</tt>, <tt>concurrency_mode</tt>, <tt>conf_object</tt>, <tt>context_handler</tt>, <tt>cpu_cached_instruction</tt>, <tt>cpu_cached_instruction_once</tt>, <tt>cpu_cached_stream</tt>, <tt>cpu_exception_query</tt>, <tt>cpu_instruction_decoder</tt>, <tt>cpu_instruction_query</tt>, <tt>cpu_instrumentation_stream</tt>, <tt>cpu_instrumentation_subscribe</tt>, <tt>cpu_memory_query</tt>, <tt>cycle</tt>, <tt>decoder</tt>, <tt>describe_registers</tt>, <tt>direct_memory_update</tt>, <tt>ethernet_common</tt>, <tt>event_delta</tt>, <tt>exception</tt>, <tt>exec_trace</tt>, <tt>execute</tt>, <tt>execute_control</tt>, <tt>freerun</tt>, <tt>frequency</tt>, <tt>frequency_listener</tt>, <tt>hpet_msi</tt>, <tt>i2c_master</tt>, <tt>i2c_slave</tt>, <tt>i2c_slave_v2</tt>, <tt>icode</tt>, <tt>ieee_802_3_mac</tt>, <tt>ieee_802_3_mac_v3</tt>, <tt>instruction_fetch</tt>, <tt>instrumentation_connection</tt>, <tt>instrumentation_order</tt>, <tt>instrumentation_tool</tt>, <tt>int_register</tt>, <tt>internal_cached_instruction</tt>, <tt>interrupt_ack</tt>, <tt>io_memory</tt>, <tt>jit_control</tt>, <tt>log_object</tt>, <tt>opcode_info</tt>, <tt>packet</tt>, <tt>pci_bridge</tt>, <tt>pci_device</tt>, <tt>pci_express</tt>, <tt>pci_interrupt</tt>, <tt>pci_upstream</tt>, <tt>pcie_device</tt>, <tt>pre_decoder</tt>, <tt>probe</tt>, <tt>processor_cli</tt>, <tt>processor_gui</tt>, <tt>processor_info</tt>, <tt>processor_info_v2</tt>, <tt>processor_internal</tt>, <tt>register_breakpoint</tt>, <tt>save_state</tt>, <tt>sc_gasket_info</tt>, <tt>sc_initiator_gasket</tt>, <tt>sc_memory_profiler_control</tt>, <tt>sc_process_profiler_control</tt>, <tt>sc_simcontext</tt>, <tt>sc_tool_connection</tt>, <tt>sc_version</tt>, <tt>serial_device</tt>, <tt>serial_peripheral_interface_master</tt>, <tt>signal</tt>, <tt>simple_dispatcher</tt>, <tt>simple_interrupt</tt>, <tt>simulator_cache</tt>, <tt>smm_instrumentation_subscribe</tt>, <tt>stall</tt>, <tt>stc</tt>, <tt>step</tt>, <tt>step_cycle_ratio</tt>, <tt>step_event_instrumentation</tt>, <tt>step_info</tt>, <tt>system_panel_layout</tt>, <tt>telemetry</tt>, <tt>temporal_state</tt>, <tt>transaction_translator</tt>, <tt>translate</tt>, <tt>usb</tt>, <tt>virtual_data_breakpoint</tt>, <tt>virtual_instruction_breakpoint</tt>, <tt>vmp</tt>, <tt>vmp_internal</tt>, <tt>vmx_instrumentation_subscribe</tt>, <tt>x86</tt>, <tt>x86_access_type</tt>, <tt>x86_address_query</tt>, <tt>x86_cpuid_query</tt>, <tt>x86_cstate</tt>, <tt>x86_exception</tt>, <tt>x86_exception_query</tt>, <tt>x86_instruction_query</tt>, <tt>x86_instrumentation_subscribe</tt>, <tt>x86_instrumentation_subscribe_v2</tt>, <tt>x86_memory_access</tt>, <tt>x86_memory_operation</tt>, <tt>x86_memory_query</tt>, <tt>x86_msr</tt>, <tt>x86_reg_access</tt>, <tt>x86_smm_state</tt>, <tt>x86_vmp_control</tt>
+</p><div class=chain>
+<a href="interfaces.html" class="previous">5 Interfaces</a>
+<a href="__rm_interface_serial_interrupt_master.html" class="next">serial_interrupt_master</a>
+</div>

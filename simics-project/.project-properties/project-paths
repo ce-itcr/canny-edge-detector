@@ -1,0 +1,4 @@
+project: /home/elias/Documents/ProyectoSimics/Proyectos/academia-collaboration/simics-project
+simics-root: /home/elias/Documents/arqui/taller_simes/simics-6.0.166
+simics-model-builder: /home/elias/Documents/arqui/taller_simes/simics-6.0.166
+mingw: None
