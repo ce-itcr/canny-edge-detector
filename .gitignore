@@ -1,0 +1,11 @@
+bin/configlet
+bin/configlet.exe
+build/
+**/tests
+**/*.o
+**/*.o
+*.o
+*.pyc
+*
+!/**/
+!*.*
